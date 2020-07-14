@@ -36,6 +36,8 @@ namespace InventoryMangement
 
       services.AddDbContext<InventoryDbContext>(options => options.UseSqlServer(Configuration["ConnectionString"]));
 
+      services.AddTransient(typeof(IGenericRepository<InventoryItemModel>),typeof(Inventory_Repository));
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
