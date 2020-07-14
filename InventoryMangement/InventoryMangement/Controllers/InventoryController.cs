@@ -14,10 +14,10 @@ namespace InventoryMangement.Controllers
   [ApiController]
   public class InventoryController : ControllerBase
   {
-    private InventoryDbContext inventoryDbContext;
-    public InventoryController(InventoryDbContext inventoryDbContext_)
+    private IGenericRepository<InventoryItemModel> _genericRepository;
+    public InventoryController(IGenericRepository<InventoryItemModel> genericRepository)
     {
-      inventoryDbContext = inventoryDbContext_;
+      _genericRepository = genericRepository;
     }
 
     // GET: api/Inventory/
@@ -26,7 +26,7 @@ namespace InventoryMangement.Controllers
     {
       try
       {
-        IQueryable<InventoryItemModel> inventoryItems = await Task.Run(() => inventoryDbContext.inventoryItemModels.AsQueryable());
+        IQueryable<InventoryItemModel> inventoryItems = await _genericRepository.GetAll();
         return Ok(inventoryItems.ToList());
       }
       catch (Exception ex)
@@ -43,9 +43,7 @@ namespace InventoryMangement.Controllers
       try
       {
         inventoryItem.CreatedDate = DateTime.Now;
-        await inventoryDbContext.AddAsync(inventoryItem);
-        await inventoryDbContext.SaveChangesAsync();
-
+        await _genericRepository.Add(inventoryItem);
         return Ok();
       }
       catch (Exception ex)
@@ -60,16 +58,8 @@ namespace InventoryMangement.Controllers
     {
       try
       {
-        InventoryItemModel updateItem = inventoryDbContext.inventoryItemModels.Where(a => a.ItemId == inventoryItem.ItemId).FirstOrDefault();
-        updateItem.ItemDescription = inventoryItem.ItemDescription;
-        updateItem.ItemIMG = inventoryItem.ItemIMG;
-        updateItem.ItemName = inventoryItem.ItemName;
-        updateItem.ItemPrice = inventoryItem.ItemPrice;
-        updateItem.LastUpdateDate = inventoryItem.LastUpdateDate;
-        inventoryDbContext.Update(updateItem);
-        inventoryDbContext.Entry(updateItem).State = EntityState.Modified;
-        await inventoryDbContext.SaveChangesAsync();
-
+        inventoryItem.LastUpdateDate = DateTime.Now;
+        await _genericRepository.Update(inventoryItem);
         return Ok();
       }
       catch (Exception ex)
@@ -84,10 +74,8 @@ namespace InventoryMangement.Controllers
     {
       try
       {
-        InventoryItemModel updateItem = inventoryDbContext.inventoryItemModels.Where(a => a.ItemId == ItemId).FirstOrDefault();
-        inventoryDbContext.Remove(updateItem);
-        await inventoryDbContext.SaveChangesAsync();
-
+        InventoryItemModel updateItem = await _genericRepository.GetById(ItemId);
+        await _genericRepository.Delete(updateItem);
         return Ok();
       }
       catch (Exception ex)
