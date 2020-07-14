@@ -10,6 +10,8 @@ namespace InventoryManagement.Test
 {
     public class UnitTest1
     {
+        private string connString = "Data Source=DESKTOP-LP8KTQK\\SQLEXPRESS;Initial Catalog=InventoryManagement;Integrated Security=True";
+
         [Fact(Skip = "Currently Not Required")]
         public void Test1()
         {
@@ -22,8 +24,7 @@ namespace InventoryManagement.Test
         [Fact]
         public async void TestGet()
         {
-            var options = new DbContextOptionsBuilder<InventoryDbContext>()
-                             .UseSqlServer("Data Source=DESKTOP-LP8KTQK\\SQLEXPRESS;Initial Catalog=InventoryManagement;Integrated Security=True").Options;
+            var options = new DbContextOptionsBuilder<InventoryDbContext>().UseSqlServer(connString).Options;
 
             using (var context = new InventoryDbContext(options))
             {
@@ -36,13 +37,11 @@ namespace InventoryManagement.Test
 
         }
 
-        [Theory(DisplayName = "Get Items by Id")]
+        [Theory(Skip = "Currently Not Required",DisplayName = "Get Items by Id")]
         [InlineData(2)]
         public async void TestGetById(int ItemId)
         {
-            var options = new DbContextOptionsBuilder<InventoryDbContext>()
-                             .UseSqlServer("Data Source=DESKTOP-LP8KTQK\\SQLEXPRESS;Initial Catalog=InventoryManagement;Integrated Security=True").Options;
-
+            var options = new DbContextOptionsBuilder<InventoryDbContext>().UseSqlServer(connString).Options;
             using (var context = new InventoryDbContext(options))
             {
 
@@ -54,13 +53,11 @@ namespace InventoryManagement.Test
             }
 
         }
-        [Theory(DisplayName = "Get All Items by Id")]
+        [Theory(Skip = "Currently Not Required",DisplayName = "Get All Items by Id")]
         [InlineData(2)]
         public async void TestGetAllById(int ItemId)
         {
-            var options = new DbContextOptionsBuilder<InventoryDbContext>()
-                             .UseSqlServer("Data Source=DESKTOP-LP8KTQK\\SQLEXPRESS;Initial Catalog=InventoryManagement;Integrated Security=True").Options;
-
+            var options = new DbContextOptionsBuilder<InventoryDbContext>().UseSqlServer(connString).Options;
             using (var context = new InventoryDbContext(options))
             {
 
@@ -73,12 +70,11 @@ namespace InventoryManagement.Test
 
         }
         //Skip = "Already Add is Tested",
-        [Theory( DisplayName = "Add new Item in Inventory")]
+        [Theory(Skip = "Currently Not Required", DisplayName = "Add new Item in Inventory")]
         [InlineData("Sharpner")]
         public async void TestAdd(string expectedName)
         {
-            var options = new DbContextOptionsBuilder<InventoryDbContext>()
-                             .UseSqlServer("Data Source=DESKTOP-LP8KTQK\\SQLEXPRESS;Initial Catalog=InventoryManagement;Integrated Security=True").Options;
+            var options = new DbContextOptionsBuilder<InventoryDbContext>().UseSqlServer(connString).Options;
             InventoryItemModel inventoryItem = new InventoryItemModel();
             using (var context = new InventoryDbContext(options))
             {
@@ -109,8 +105,7 @@ namespace InventoryManagement.Test
         [InlineData("Brush")]
         public async void TestUpdate(string expectedName)
         {
-            var options = new DbContextOptionsBuilder<InventoryDbContext>()
-                             .UseSqlServer("Data Source=DESKTOP-LP8KTQK\\SQLEXPRESS;Initial Catalog=InventoryManagement;Integrated Security=True").Options;
+            var options = new DbContextOptionsBuilder<InventoryDbContext>().UseSqlServer(connString).Options;
             InventoryItemModel inventoryItem = new InventoryItemModel();
             using (var context = new InventoryDbContext(options))
             {
@@ -133,11 +128,10 @@ namespace InventoryManagement.Test
             }
 
         }
-        [Fact]
+        [Fact(Skip = "Currently Not Required")]
         public async void TestDelete()
         {
-            var options = new DbContextOptionsBuilder<InventoryDbContext>()
-                             .UseSqlServer("Data Source=DESKTOP-LP8KTQK\\SQLEXPRESS;Initial Catalog=InventoryManagement;Integrated Security=True").Options;
+            var options = new DbContextOptionsBuilder<InventoryDbContext>().UseSqlServer(connString).Options;
             InventoryItemModel inventoryItem = new InventoryItemModel();
             using (var context = new InventoryDbContext(options))
             {
